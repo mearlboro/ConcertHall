@@ -1,0 +1,50 @@
+<html>
+<head>
+	<link rel='stylesheet' href='styles.css'>
+	<script src='script.js'></script>
+	<script src='data/1.js'></script>
+	<script src='data/2.js'></script>
+	<script src='data/3.js'></script>
+	<script src='data/4.js'></script>
+	<script src='data/5.js'></script>
+	<script src='data/6.js'></script>
+	<script src='data/7.js'></script>
+	<script src='data/8.js'></script>
+</head>
+<body>
+
+<h1>Welcome to the Concert Hall</h1>
+<div class="menu">
+<button class="button" onclick="play(1)">1st Piece</button>
+<button class="button" onclick="play(2)">2nd Piece</button>
+<button class="button" onclick="play(3)">3rd Piece</button>
+<button class="button" onclick="play(4)">4th Piece</button>
+<button class="button" onclick="play(5)">5th Piece</button>
+<button class="button" onclick="play(6)">6th Piece</button>
+<button class="button" onclick="play(7)">7th Piece</button>
+<button class="button" onclick="play(8)">8th Piece</button>
+<button class="button" id="stop" onclick="stop()" disabled="1">Stop</button>
+</div>
+
+<div class="headings">
+<h4 id="playing"></h4>
+<h2 id="current"></h2>
+</div>
+<div class="subheadings">
+<h6 id="timecode"></h6>
+</div>
+
+<table class="concerthall">
+<tr><td class="row">F</td><td><div id="F01" class="subject"></div></td><td><div id="F02" class="subject"></div></td><td><div id="F03" class="subject"></div></td><td><div id="F04" class="subject"></div></td><td>     </td><td><div id="F05" class="subject"></div></td><td><div id="F06" class="subject"></div></td><td><div id="F07" class="subject"></div></td><td><div id="F08" class="subject"></div></td><td>                                    </td><td>                                    </td><td>                                    </td><td>                                    </td></tr>
+<tr><td class="row">E</td><td><div id="E01" class="subject"></div></td><td><div id="E02" class="subject"></div></td><td><div id="E03" class="subject"></div></td><td><div id="E04" class="subject"></div></td><td>     </td><td><div id="E05" class="subject"></div></td><td><div id="E06" class="subject"></div></td><td><div id="E07" class="subject"></div></td><td><div id="E08" class="subject"></div></td><td><div id="E09" class="subject"></div></td><td><div id="E10" class="subject"></div></td><td><div id="E11" class="subject"></div></td><td><div id="E12" class="subject"></div></td></tr>
+<tr><td class="row">D</td><td><div id="D01" class="subject"></div></td><td><div id="D02" class="subject"></div></td><td><div id="D03" class="subject"></div></td><td><div id="D04" class="subject"></div></td><td>     </td><td><div id="D05" class="subject"></div></td><td><div id="D06" class="subject"></div></td><td><div id="D07" class="subject"></div></td><td><div id="D08" class="subject"></div></td><td><div id="D09" class="subject"></div></td><td><div id="D10" class="subject"></div></td><td><div id="D11" class="subject"></div></td><td><div id="D12" class="subject"></div></td></tr>
+<tr><td class="row">C</td><td><div id="C01" class="subject"></div></td><td><div id="C02" class="subject"></div></td><td><div id="C03" class="subject"></div></td><td><div id="C04" class="subject"></div></td><td>     </td><td><div id="C05" class="subject"></div></td><td><div id="C06" class="subject"></div></td><td><div id="C07" class="subject"></div></td><td><div id="C08" class="subject"></div></td><td><div id="C09" class="subject"></div></td><td><div id="C10" class="subject"></div></td><td><div id="C11" class="subject"></div></td><td><div id="C12" class="subject"></div></td></tr>
+<tr><td class="row">B</td><td><div id="B01" class="subject"></div></td><td><div id="B02" class="subject"></div></td><td><div id="B03" class="subject"></div></td><td><div id="B04" class="subject"></div></td><td>     </td><td><div id="B05" class="subject"></div></td><td><div id="B06" class="subject"></div></td><td><div id="B07" class="subject"></div></td><td><div id="B08" class="subject"></div></td><td><div id="B09" class="subject"></div></td><td><div id="B10" class="subject"></div></td><td><div id="B11" class="subject"></div></td><td><div id="B12" class="subject"></div></td></tr>
+<tr><td class="row">A</td><td>                                    </td><td>                                    </td><td>                                    </td><td>                                    </td><td>     </td><td>                                    </td><td><div id="A06" class="subject"></div></td><td><div id="A07" class="subject"></div></td><td><div id="A08" class="subject"></div></td><td><div id="A09" class="subject"></div></td><td>                                    </td><td>                                    </td><td>                                    </td></tr>
+</table>
+
+
+<div id="test">
+</div>
+</body>
+</html>

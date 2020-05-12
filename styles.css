@@ -1,0 +1,61 @@
+body {
+	background: #19181a;
+	color: #fff;
+	font-family: Garamond;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+h6 {
+	font-family: monospace;
+}
+
+.headings {
+	padding: 10px;
+	height: 50px;
+}
+
+.subheadings {
+	height: 20px;
+}
+
+.menu {
+	margin-top: 40px;
+	margin-left: calc((100vw - 800px)/2);
+}
+.button {
+	display: inline-block;
+	padding: 5px;
+	border: 1px solid #fff;
+	color: #fff;
+	text-transform: uppercase;
+	background: transparent;
+	font-family: monospace;
+}
+
+.concerthall {
+	width: 720px;
+	margin-left: calc((100vw - 720px)/2);
+}
+.concerthall td {
+	width: 50px;
+	height: 40px;
+	text-align: center;
+	display: inline-block;
+}
+.concerthall .row {
+	width: 30px;
+	box-sizing: border-box;
+	padding-top: 10px;
+}
+
+.subject {
+	width: 30px;
+	height: 30px;
+	margin: 5px 10px;
+	background: rgb(127,127,127);
+}
