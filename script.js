@@ -1,9 +1,19 @@
-var counter = null;
-var timestep = 0;
+var counter = null, audio = null, timestep = 0;
+
+var songs = {
+	1 : "Score from Mozart (let-go)",
+	2 : "Score from Mozart (strict)",
+	3 : "Strict Improvisation with Single Lead",
+	4 : "Strict Improvisation with Dynamic Switch",
+	5 : "Let-go Improvisation with Dynamic Switch",
+	6 : "Let-go Improvisation with Single Lead",
+	7 : "Score from Haydn (strict)",
+	8 : "Score from Haydn (let-go)"
+};
 
 function play(piece) {
 	document.getElementById("playing").innerHTML = "Now playing";
-	document.getElementById("current").innerHTML = "Piece " + piece;
+	document.getElementById("current").innerHTML = songs[piece];
 	document.getElementById("stop").disabled = false;
 
 	// play song
@@ -13,25 +23,9 @@ function play(piece) {
 	play_animation(piece);
 }
 
-function stop() {
-	document.getElementById("playing").innerHTML = "";
-	document.getElementById("current").innerHTML = "";
-	document.getElementById("stop").disabled = true;
-
-	stop_song();
-	stop_animation();
-}
-
-function stop_song() {
-
-}
-
-function stop_animation() {
-	clearInterval(counter);
-}
-
-function play_song() {
-
+function play_song(piece) {
+	audio = new Audio("music/" + piece + ".ogg");
+	audio.play();
 }
 
 function play_animation(piece) {
@@ -54,7 +48,7 @@ function timer(piece) {
 	var count = window.data[piece]["A06"][count];
 
 	if (timestep >= count) {
-		clearInterval(counter);
+		stop();
 		return;
 	}
 
@@ -78,4 +72,13 @@ function loop(piece, seat, avg, min, max, time) {
     
     subj.style.setProperty('background', 'rgb(' + Math.round(red) + ', 127, 127)')
 
+}
+
+function stop() {
+	document.getElementById("playing").innerHTML = "";
+	document.getElementById("current").innerHTML = "";
+	document.getElementById("stop").disabled = true;
+
+	audio.pause();
+	clearInterval(counter);
 }
