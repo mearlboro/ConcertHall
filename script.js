@@ -23,6 +23,15 @@ function play(piece) {
 	play_animation(piece);
 }
 
+function stop() {
+	document.getElementById("playing").innerHTML = "";
+	document.getElementById("current").innerHTML = "";
+	document.getElementById("stop").disabled = true;
+
+	audio.pause();
+	clearInterval(counter);
+}
+
 function play_song(piece) {
 	audio = new Audio("music/" + piece + ".ogg");
 	audio.play();
@@ -42,7 +51,7 @@ function play_animation(piece) {
 
 function timer(piece) {
 	timestep ++;
-	document.getElementById('timecode').innerHTML = timestep / 10.0;
+	document.getElementById('timecode').innerHTML = timestep / 10.0 + ' seconds';
 
 	// all seats have the same number of data points
 	var count = window.data[piece]["A06"][count];
@@ -72,13 +81,4 @@ function loop(piece, seat, avg, min, max, time) {
     
     subj.style.setProperty('background', 'rgb(' + Math.round(red) + ', 127, 127)')
 
-}
-
-function stop() {
-	document.getElementById("playing").innerHTML = "";
-	document.getElementById("current").innerHTML = "";
-	document.getElementById("stop").disabled = true;
-
-	audio.pause();
-	clearInterval(counter);
 }
