@@ -19,19 +19,19 @@ my %timeframes = (
 my ($din, $dout) = ('./data', './out');
 my ($fin, $fout, $FIN, $FOUT);
 
-my ($piece) = @ARGV; 
+my ($piece) = @ARGV;
 my $seat;
 
 printf "Processing piece %s\n", $piece;
 foreach $fin (glob("$din/*.csv")) {
-  
+
     if ($fin =~ /_(\w{3})[.]csv$/) {
         $seat = $1;
-  
+
         printf "Processing file %s for seat %s", $fin, $seat;
-  
+
         open $FIN, "<", $fin or die "Can't open '$fin'";
-  
+
         $fout = "$dout/$piece.js";
         open $FOUT, ">>", $fout or die "Can't open '$fout'";
 
@@ -41,9 +41,9 @@ foreach $fin (glob("$din/*.csv")) {
         	}
             print $FOUT "window.data[$piece] = {\n";
         }
-    
+
         process_csv($seat, $piece, $FIN, $FOUT);
-        
+
         printf "\n";
         close $FIN or die "Can't close '$fin'";
     }
@@ -68,10 +68,10 @@ sub process_csv() {
         if ( /(-?\d+(?:[.]\d+)?),(\d+),(.*)/ ) {
 
             $timestamp = $1 + 0;
-            if ($timestamp >= $timeframes{$piece}->{start} && 
+            if ($timestamp >= $timeframes{$piece}->{start} &&
                 $timestamp <= $timeframes{$piece}->{end}) {
 
-                my $value = $3 + 0;
+                my $value = $3 - 9.81;
                 $sum += $value;
                 $vmin = min ($vmin, $value);
                 $vmax = max ($vmax, $value);
@@ -79,9 +79,9 @@ sub process_csv() {
 
                 print $FOUT "$value, ";
             }
-            #elsif ($timestamp > $timeframes{$piece}->{end}) {
-            #    last;
-            #}    
+            elsif ($timestamp > $timeframes{$piece}->{end}) {
+                last;
+            }
         }
     }
     print $FOUT "],\n";
