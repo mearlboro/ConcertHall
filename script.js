@@ -64,7 +64,7 @@ function loop(piece, seat, avg, min, max, time) {
     var subj = document.getElementById(seat);
     var prev_color = window.getComputedStyle(subj).getPropertyValue("background-color");
     var prev_red = parseInt(prev_color.split('(')[1].split(',')[0]);
-    var red = Math.abs(prev_red + (curr - prev) * 100);
+    var red = Math.abs(127 + (curr - prev) * 100);
     red = Math.min(red, 255); 
     red = Math.max(0, red);
 
