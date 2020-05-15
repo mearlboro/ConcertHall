@@ -1,4 +1,4 @@
-var counter = null, audio = null, timestep = 0;
+var counter = null, audio = null, timestep = 0, timer_on = 0;
 
 var songs = {
 	1 : "Score from Mozart (let-go)",
@@ -26,10 +26,16 @@ function play(piece) {
 function stop() {
 	document.getElementById("playing").innerHTML = "";
 	document.getElementById("current").innerHTML = "";
+	document.getElementById('timecode').innerHTML = "";
 	document.getElementById("stop").disabled = true;
 
+	// stop song
 	audio.pause();
+	audio = null;
+
+	// stop animating
 	clearInterval(counter);
+	timer_on = 0;
 }
 
 function play_song(piece) {
@@ -46,10 +52,13 @@ function play_animation(piece) {
 
     // define and start timer, with 100ms ticks
 	timestep = 0;
+	timer_on = 1;
 	counter = setInterval(function () { timer(piece) }, 100);
 }
 
 function timer(piece) {
+	if (timer_on = 0) return;
+
 	timestep ++;
 	document.getElementById('timecode').innerHTML = timestep / 10.0 + ' seconds';
 
