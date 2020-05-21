@@ -16,33 +16,19 @@ function play(piece) {
 	document.getElementById("current").innerHTML = songs[piece];
 	document.getElementById("stop").disabled = false;
 
-	// play song
-	play_song(piece);
+    // stop whatever is playing first
+    if (audio) {
+        stop_song(piece);
+        stop_animation(piece);
+    }
 
-	// animate the audience
+	play_song(piece);
 	play_animation(piece);
 }
-
-function stop() {
-	document.getElementById("playing").innerHTML = "";
-	document.getElementById("current").innerHTML = "";
-	document.getElementById('timecode').innerHTML = "";
-	document.getElementById("stop").disabled = true;
-
-	// stop song
-	audio.pause();
-	audio = null;
-
-	// stop animating
-	clearInterval(counter);
-	timer_on = 0;
-}
-
 function play_song(piece) {
 	audio = new Audio("music/" + piece + ".ogg");
 	audio.play();
 }
-
 function play_animation(piece) {
 	// clear all colours from audience
 	for (var seat in window.data[piece]) {
@@ -54,6 +40,24 @@ function play_animation(piece) {
 	timestep = 0;
 	timer_on = 1;
 	counter = setInterval(function () { timer(piece) }, 100);
+}
+
+function stop() {
+	document.getElementById("playing").innerHTML = "";
+	document.getElementById("current").innerHTML = "";
+	document.getElementById('timecode').innerHTML = "";
+	document.getElementById("stop").disabled = true;
+
+    stop_song();
+    stop_animation();
+}
+function stop_song() {
+	audio.pause();
+	audio = null;
+}
+function stop_animation() {
+	clearInterval(counter);
+	timer_on = 0;
 }
 
 function timer(piece) {
