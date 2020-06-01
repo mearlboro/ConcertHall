@@ -54,19 +54,23 @@ h4, h6 {
 }
 .concerthall td {
 	width: 50px;
-	height: 40px;
+	height: 50px;
 	text-align: center;
-	display: inline-block;
+	display: table-cell;
 }
 .concerthall .row {
 	width: 30px;
 	box-sizing: border-box;
-	padding-top: 10px;
+	padding-top: 15px;
 }
 
 .subject {
+	background: rgb(127,127,127);
+    border-radius: 50%;
 	width: 30px;
 	height: 30px;
-	margin: 5px 10px;
-	background: rgb(127,127,127);
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    transform: translateX(+0%) translateY(+0%) scale(1);
 }
