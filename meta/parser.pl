@@ -30,18 +30,18 @@ use strict;
 
 use List::Util qw(min max);
 
-my %timeframes = (
-    1 => { start =>    10, end =>   147, },
-    2 => { start =>   160, end =>   280, },
-    3 => { start =>   459, end =>   507, },
-    4 => { start =>   512, end =>   647, },
-    5 => { start =>   795, end =>   978, },
-    6 => { start =>   983, end =>  1093, },
-    7 => { start =>  1218, end =>  1354, },
-    8 => { start =>  1364, end =>  1509, },
+my %timeframes = ( # where each song begins and ends, in seconds
+    1 => { start =>     5, end =>   142, },
+    2 => { start =>   155, end =>   275, },
+    3 => { start =>   454, end =>   502, },
+    4 => { start =>   507, end =>   642, },
+    5 => { start =>   790, end =>   973, },
+    6 => { start =>   978, end =>  1088, },
+    7 => { start =>  1213, end =>  1349, },
+    8 => { start =>  1359, end =>  1504, },
 );
 
-my $sample_freq = 10;
+my $sample_freq = 100;
 
 my ($din, $dout) = ('./ImprovisationSynchronization/SVS_New_Logs', './ConcertHall/data');
 my ($fin, $fout, $FIN, $FOUT);
@@ -93,16 +93,18 @@ sub process_csv() {
     print $FOUT "\"$sensor\" : {\n";
     print $FOUT "  \"acc\" : [ ";
 
-    my ($timestamp, $count) = (0, 0);
+    my $count = 0;
 	my ($x, $y, $z, $xsum, $ysum, $zsum) = (0, 0, 0, 0, 0, 0);
 
     while (<$FIN>) {
         chomp;
 
+        $count ++;
+
         if ( /([^,]+),$val_re,$val_re,$val_re/ ) {
 
-            if ($timestamp >= $sample_freq * $timeframes{$piece}->{start} &&
-                $timestamp <= $sample_freq * $timeframes{$piece}->{end}) {
+            if ($count >= $sample_freq * $timeframes{$piece}->{start} &&
+                $count <= $sample_freq * $timeframes{$piece}->{end}) {
 
                 $x = $2 + 0.0;
                 $y = $3 + 9.81;
@@ -112,15 +114,12 @@ sub process_csv() {
 				$ysum += $y;
 				$zsum += $z;
 
-                $count ++;
 
                 print $FOUT "[$x,$y,$z], ";
             }
-            elsif ($timestamp > $sample_freq * $timeframes{$piece}->{end}) {
+            elsif ($count > $sample_freq * $timeframes{$piece}->{end}) {
                 last;
             }
-
-            $timestamp ++;
         }
     }
     print $FOUT "],\n";
