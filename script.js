@@ -1,4 +1,5 @@
 var counter = null, audio = null, timestep = 0, timer_on = 0;
+var sample_rate = 100.0;
 
 var songs = {
 	1 : "Score from Mozart (Let-go)",
@@ -36,10 +37,10 @@ function play_animation(piece) {
         if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
 	}
 
-    // define and start timer, with 100ms ticks
+    // define and start timer, with ticks in miliseconds
 	timestep = 0;
 	timer_on = 1;
-	counter = setInterval(function () { timer(piece) }, 100); // ticks 10 times a second
+	counter = setInterval(function () { timer(piece) }, 1000 / sample_rate);
 }
 
 function stop() {
@@ -64,7 +65,7 @@ function timer(piece) {
 	if (timer_on = 0) return;
 
 	timestep ++;
-	document.getElementById('timecode').innerHTML = timestep / 10.0 + ' seconds';
+	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
 
 	// all seats have the same number of data points
 	var count = window.data[piece]['A06']['count'];
