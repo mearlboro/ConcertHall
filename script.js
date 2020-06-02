@@ -33,7 +33,7 @@ function play_animation(piece) {
 	// clear all movement from audience
 	for (var seat in window.data[piece]) {
     	var elem = document.getElementById(seat);
-            elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
+        if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
 	}
 
     // define and start timer, with 100ms ticks
@@ -82,35 +82,34 @@ function timer(piece) {
 function loop(piece, seat) {
 
     var subj = document.getElementById(seat);
-    var trans = window.getComputedStyle(subj).getPropertyValue("transform");
+
+    if (!subj) return;
+
+    var trans = subj.style.transform;
 
     var x = update(piece, seat, 0, trans),
         y = update(piece, seat, 1, trans),
         z = update(piece, seat, 2, trans);
 
-    // translateX(+0%) translateY(+0%) scale(1)
     subj.style.setProperty('transform', 'translateX(' + x + 'px) translateY(' + y + 'px) scale(' + z + ')');
-
-    console.log(seat + ': x ' + x + ' y ' + y + ' z ' + z);
-
 }
 
 function update(piece, seat, axis, trans) {
 	var curr = window.data[piece][seat]['acc'][timestep][axis],
-	    prev = window.data[piece][seat]['acc'][timestep - 1][axis] || window.data[piece][seat]["avg"][axis];
+	    prev = window.data[piece][seat]['acc'][timestep - 1][axis] || window.data[piece][seat]['avg'][axis];
 
     // trapezoidal integration
     var d = (curr + prev) / 2.0;
 
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix
-    // matrix( scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY() )
+    // translateX(+0%) translateY(+0%) scale(1)
+    trans = trans.split(' ');
     switch (axis) {
-        case 0: prev = parseFloat(trans.split(',')[4]); // x-axis val as transformX, in px
-        case 1: prev = parseFloat(trans.split(',')[5]); // y-axis val as transformY, in px
-        case 2: prev = parseFloat(trans.split('(')[1].split(',')[0]); // z-axis val as scale, ratio
+        case 0: prev = parseFloat(trans[0].split('(')[1].split('p')[0]); // x-axis val as transformX, in px
+        case 1: prev = parseFloat(trans[1].split('(')[1].split('p')[0]); // y-axis val as transformY, in px
+        case 2: prev = parseFloat(trans[2].split('(')[1].split(')')[0]); // z-axis val as scale, ratio
     }
 
-    // translation evolves +-2px every unit, scale is either smaller or bigger proportionally
+    // translation evolves +-1px every unit, scale is either smaller or bigger proportionally
     if (axis == 2) return 1 + d / 100.0;
     else return prev + d;
 }
