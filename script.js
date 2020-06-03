@@ -96,21 +96,9 @@ function loop(piece, seat) {
 }
 
 function update(piece, seat, axis, trans) {
-	var curr = window.data[piece][seat]['acc'][timestep][axis],
-	    prev = window.data[piece][seat]['acc'][timestep - 1][axis] || window.data[piece][seat]['avg'][axis];
+	var d = window.data[piece][seat]['acc'][timestep][axis] - window.data[piece][seat]['median'][axis];
 
-    // trapezoidal integration
-    var d = (curr + prev) / 2.0;
-
-    // translateX(+0%) translateY(+0%) scale(1)
-    trans = trans.split(' ');
-    switch (axis) {
-        case 0: prev = parseFloat(trans[0].split('(')[1].split('p')[0]); // x-axis val as transformX, in px
-        case 1: prev = parseFloat(trans[1].split('(')[1].split('p')[0]); // y-axis val as transformY, in px
-        case 2: prev = parseFloat(trans[2].split('(')[1].split(')')[0]); // z-axis val as scale, ratio
-    }
-
-    // translation evolves +-1px every unit, scale is either smaller or bigger proportionally
-    if (axis == 2) return 1 + d / 100.0;
-    else return prev + d;
+    var scale = 3;
+    if (axis == 2) return 1 + d / 10.0 * scale;
+    else return d * scale;
 }
