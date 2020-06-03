@@ -1,8 +1,9 @@
 var counter = null, audio = null, timestep = 0, timer_on = 0;
+var sample_rate = 100.0;
 
 var songs = {
-	1 : "Score from Mozart (let-go)",
-	2 : "Score from Mozart (strict)",
+	1 : "Score from Mozart (Let-go)",
+	2 : "Score from Mozart (Strict)",
 	3 : "Strict Improvisation with Single Lead",
 	4 : "Strict Improvisation with Dynamic Switch",
 	5 : "Let-go Improvisation with Dynamic Switch",
@@ -30,16 +31,16 @@ function play_song(piece) {
 	audio.play();
 }
 function play_animation(piece) {
-	// clear all colours from audience
+	// clear all movement from audience
 	for (var seat in window.data[piece]) {
     	var elem = document.getElementById(seat);
-        elem.style.setProperty('background', 'rgb(127, 127, 127)');
+        if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
 	}
 
-    // define and start timer, with 100ms ticks
+    // define and start timer, with ticks in miliseconds
 	timestep = 0;
 	timer_on = 1;
-	counter = setInterval(function () { timer(piece) }, 100);
+	counter = setInterval(function () { timer(piece) }, 1000 / sample_rate);
 }
 
 function stop() {
@@ -64,10 +65,10 @@ function timer(piece) {
 	if (timer_on = 0) return;
 
 	timestep ++;
-	document.getElementById('timecode').innerHTML = timestep / 10.0 + ' seconds';
+	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
 
 	// all seats have the same number of data points
-	var count = window.data[piece]["A06"][count];
+	var count = window.data[piece]['A06']['count'];
 
 	if (timestep >= count) {
 		stop();
@@ -75,23 +76,29 @@ function timer(piece) {
 	}
 
 	for (var seat in window.data[piece]) {
-		loop(piece, seat, window.data[piece][seat]["avg"], window.data[piece][seat]["min"], window.data[piece][seat]["max"], timestep);
+		loop(piece, seat);
 	}
 }
 
-function loop(piece, seat, avg, min, max, time) {
-	var curr = window.data[piece][seat]["data"][time],
-	    prev = window.data[piece][seat]["data"][time - 1] || min;
+function loop(piece, seat) {
 
     var subj = document.getElementById(seat);
-    var prev_color = window.getComputedStyle(subj).getPropertyValue("background-color");
-    var prev_red = parseInt(prev_color.split('(')[1].split(',')[0]);
-    var red = Math.abs(127 + (curr - prev) * 200);
-    red = Math.min(red, 255); 
-    red = Math.max(0, red);
 
-	//console.log(seat + ":" + curr + ',' + prev_red + ',' + (prev - curr) + ',' + red);
-    
-    subj.style.setProperty('background', 'rgb(' + Math.round(red) + ', 127, 127)')
+    if (!subj) return;
 
+    var trans = subj.style.transform;
+
+    var x = update(piece, seat, 0, trans),
+        y = update(piece, seat, 1, trans),
+        z = update(piece, seat, 2, trans);
+
+    subj.style.setProperty('transform', 'translateX(' + x + 'px) translateY(' + y + 'px) scale(' + z + ')');
+}
+
+function update(piece, seat, axis, trans) {
+	var d = window.data[piece][seat]['acc'][timestep][axis] - window.data[piece][seat]['median'][axis];
+
+    var scale = 3;
+    if (axis == 2) return 1 + d / 10.0 * scale;
+    else return d * scale;
 }
