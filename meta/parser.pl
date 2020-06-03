@@ -21,14 +21,17 @@
 #  │   ├── script.js
 #  │   └── styles.css
 #  └── ImprovisationSynchronization
+#      ├── data_cleaner.py
 #      ├── Newlog_gen.py
-#      └── SVS_New_Logs
+#      ├── SVS_New_Logs
+#      └── SVS_Proc_Data
 
 
 use warnings;
 use strict;
 
 use List::Util qw(min max);
+use Statistics::Basic qw(median);
 
 my %timeframes = ( # where each song begins and ends, in seconds
     1 => { start =>     5, end =>   142, },
@@ -43,7 +46,7 @@ my %timeframes = ( # where each song begins and ends, in seconds
 
 my $sample_freq = 100;
 
-my ($din, $dout) = ('./ImprovisationSynchronization/SVS_New_Logs', './ConcertHall/data');
+my ($din, $dout) = ('./ImprovisationSynchronization/SVS_Proc_Data', './ConcertHall/data');
 my ($fin, $fout, $FIN, $FOUT);
 
 my ($piece) = @ARGV;
@@ -94,26 +97,29 @@ sub process_csv() {
     print $FOUT "  \"acc\" : [ ";
 
     my $count = 0;
-	my ($x, $y, $z, $xsum, $ysum, $zsum) = (0, 0, 0, 0, 0, 0);
+    my ($x, $y, $z) = (0, 0, 0);
+    my @xs;
+    my @ys;
+    my @zs;
 
     while (<$FIN>) {
         chomp;
 
         $count ++;
 
+        # [timestamp],[horizontal],[front],[vertical]
         if ( /([^,]+),$val_re,$val_re,$val_re/ ) {
 
             if ($count >= $sample_freq * $timeframes{$piece}->{start} &&
                 $count <= $sample_freq * $timeframes{$piece}->{end}) {
 
                 $x = $2 + 0.0;
-                $y = $3 + 9.81;
-                $z = $4 + 0.0;
+                $y = $3 + 0.0;
+                $z = $4 + 9.81;
 
-				$xsum += $x;
-				$ysum += $y;
-				$zsum += $z;
-
+                push @xs, $x;
+                push @ys, $y;
+                push @zs, $z;
 
                 print $FOUT "[$x,$y,$z], ";
             }
@@ -125,7 +131,7 @@ sub process_csv() {
     print $FOUT "],\n";
     print $FOUT "  \"count\" : " . $count . ",";
     if ($count != 0) {
-        print $FOUT "  \"avg\" : [" . $xsum / $count . "," . $ysum / $count . "," . $zsum / $count . "] ";
+        print $FOUT "  \"median\" : [" . median(@xs) . "," . median(@ys) . "," . median(@zs) . "] ";
     }
     else {
         print $FOUT "  \"avg\" : [ NaN, NaN, NaN ] \n";
