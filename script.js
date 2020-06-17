@@ -12,6 +12,12 @@ var songs = {
 	8 : "Score from Haydn (let-go)"
 };
 
+window.onload = function(e) {
+    var piece = location.pathname.split('/').pop().split('.')[0];
+    document.getElementById("current").innerHTML = songs[piece];
+};
+
+
 function play(piece) {
 	document.getElementById("playing").innerHTML = "Now playing";
 	document.getElementById("current").innerHTML = songs[piece];
