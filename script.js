@@ -105,7 +105,7 @@ function loop(piece, seat) {
 function update(piece, seat, axis, trans) {
 	var d = window.data[piece][seat]['acc'][timestep][axis] - window.data[piece][seat]['median'][axis];
 
-    var scale = 3;
-    if (axis == 2) return 1 + d / 10.0 * scale;
+    var scale = 10;
+    if (axis == 2) return 1 + d / 20.0 * scale;
     else return d * scale;
 }

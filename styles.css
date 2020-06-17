@@ -76,14 +76,14 @@ video {
 .concerthall .row {
 	width: 30px;
 	box-sizing: border-box;
-	padding-top: 15px;
+	padding-top: 20px;
 }
 
 .subject {
 	background: rgb(127,127,127);
     border-radius: 50%;
-	width: 30px;
-	height: 30px;
+	width: 20px;
+	height: 20px;
     display: block;
     position: relative;
     margin: 0 auto;
