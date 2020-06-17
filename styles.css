@@ -12,6 +12,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
+    margin-top: 30px;
 	font-weight: 700;
 }
 
@@ -36,8 +37,12 @@ h4, h6 {
 
 .menu {
 	margin-top: 40px;
-	margin-left: calc((100vw - 800px)/2);
+	margin-left: calc((100vw - 640px)/2);
 }
+.menu-play {
+    margin-left: calc((100vw - 90px)/2);
+}
+
 .button {
 	display: inline-block;
 	padding: 5px;
@@ -69,7 +74,7 @@ h4, h6 {
     border-radius: 50%;
 	width: 30px;
 	height: 30px;
-    display: table;
+    display: block;
     position: relative;
     margin: 0 auto;
     transform: translateX(+0%) translateY(+0%) scale(1);
