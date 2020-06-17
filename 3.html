@@ -22,11 +22,15 @@
 <h1>Welcome to the Concert Hall</h1>
 <div class="menu menu-play">
 <button class="button" onclick="play(3)">PLAY</button>
-<button class="button" id="stop" onclick="stop()" disabled="1">Stop</button>
+<button class="button" onclick="pause()">PAUSE</button>
+<button class="button" id="stop" onclick="stop()" disabled="1">STOP</button>
+</div>
+
+<div class="video">
+<video src="video/3.mp4">
 </div>
 
 <div class="headings">
-<h4 id="playing"></h4>
 <h2 id="current"></h2>
 </div>
 <div class="subheadings">

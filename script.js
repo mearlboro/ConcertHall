@@ -1,4 +1,4 @@
-var counter = null, audio = null, timestep = 0, timer_on = 0;
+var counter = null, video = null, timestep = 0, timer_on = 0;
 var sample_rate = 100.0;
 
 var songs = {
@@ -17,23 +17,19 @@ window.onload = function(e) {
     document.getElementById("current").innerHTML = songs[piece];
 };
 
-
 function play(piece) {
-	document.getElementById("current").innerHTML = songs[piece];
 	document.getElementById("stop").disabled = false;
 
-    // stop whatever is playing first
-    if (audio) {
-        stop();
-    }
+    video = document.getElementsByTagName('video')[0];
 
-	play_song(piece);
-	play_animation(piece);
+    play_song();
+    play_animation(piece);
 }
-function play_song(piece) {
-	audio = new Audio("music/" + piece + ".ogg");
-	audio.play();
-    console.log('Playing');
+function play_song() {
+    if (video.readyState == 4) {
+        console.log('Playing video');
+        video.play();
+    }
 }
 function play_animation(piece) {
 	// clear all movement from audience
@@ -44,19 +40,27 @@ function play_animation(piece) {
 
     // define and start timer, with ticks in miliseconds
 	timer_on = 1;
-    timestep = 0;
 	counter = setInterval(function () { timer(piece) }, 1000 / sample_rate);
 }
 
+function pause() {
+    // video
+	video.pause();
+    console.log('Pausing video');
+
+    // animation
+	clearInterval(counter);
+	timer_on = 0;
+}
+
 function stop() {
-	document.getElementById("current").innerHTML = "";
 	document.getElementById('timecode').innerHTML = "";
 	document.getElementById("stop").disabled = true;
 
-    // audio stop and unload music
-	audio.pause();
-	audio = null;
-    console.log('Stopping');
+    // video stop and seek to start
+	video.pause();
+    video.currentTime = 0;
+    console.log('Stopping video');
 
     // animation reset timer
 	clearInterval(counter);
