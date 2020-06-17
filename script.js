@@ -19,14 +19,12 @@ window.onload = function(e) {
 
 
 function play(piece) {
-	document.getElementById("playing").innerHTML = "Now playing";
 	document.getElementById("current").innerHTML = songs[piece];
 	document.getElementById("stop").disabled = false;
 
     // stop whatever is playing first
     if (audio) {
-        stop_song(piece);
-        stop_animation(piece);
+        stop();
     }
 
 	play_song(piece);
@@ -35,6 +33,7 @@ function play(piece) {
 function play_song(piece) {
 	audio = new Audio("music/" + piece + ".ogg");
 	audio.play();
+    console.log('Playing');
 }
 function play_animation(piece) {
 	// clear all movement from audience
@@ -44,26 +43,24 @@ function play_animation(piece) {
 	}
 
     // define and start timer, with ticks in miliseconds
-	timestep = 0;
 	timer_on = 1;
+    timestep = 0;
 	counter = setInterval(function () { timer(piece) }, 1000 / sample_rate);
 }
 
 function stop() {
-	document.getElementById("playing").innerHTML = "";
 	document.getElementById("current").innerHTML = "";
 	document.getElementById('timecode').innerHTML = "";
 	document.getElementById("stop").disabled = true;
 
-    stop_song();
-    stop_animation();
-}
-function stop_song() {
+    // audio stop and unload music
 	audio.pause();
 	audio = null;
-}
-function stop_animation() {
+    console.log('Stopping');
+
+    // animation reset timer
 	clearInterval(counter);
+    timestep = 0;
 	timer_on = 0;
 }
 
