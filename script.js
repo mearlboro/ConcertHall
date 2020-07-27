@@ -1,5 +1,5 @@
 var counter = null, video = null, timestep = 0, timer_on = 0;
-var sample_rate = 100.0;
+var sample_rate = 25.0;
 
 var songs = {
 	1 : "Score from Mozart (Let-go)",

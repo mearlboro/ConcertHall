@@ -44,7 +44,7 @@ my %timeframes = ( # where each song begins and ends, in seconds
     8 => { start =>  1359, end =>  1504, },
 );
 
-my $sample_freq = 100;
+my $sample_freq = 25;
 
 my ($din, $dout) = ('./ImprovisationSynchronization/SVS_Proc_Data', './ConcertHall/data');
 my ($fin, $fout, $FIN, $FOUT);
@@ -72,9 +72,7 @@ foreach $fin (glob("$din/*.csv")) {
             open $FOUT, ">>", $fout or die "Can't open '$fout'";
 
             if (-z $fout) {
-                if ($piece == 1) {
-                    print $FOUT "window.data = {};\n";
-                }
+                print $FOUT "window.data = {};\n";
                 print $FOUT "window.data[$piece] = {\n";
             }
 
@@ -134,7 +132,7 @@ sub process_csv() {
         print $FOUT "  \"median\" : [" . median(@xs) . "," . median(@ys) . "," . median(@zs) . "] ";
     }
     else {
-        print $FOUT "  \"avg\" : [ NaN, NaN, NaN ] \n";
+        print $FOUT "  \"median\" : [ NaN, NaN, NaN ] \n";
     }
 
     print $FOUT "},\n";
