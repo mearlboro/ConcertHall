@@ -7,6 +7,7 @@ var sample_rate = 25.0;
 var piece = location.pathname.split('/').pop().split('.')[0];
 var signal = {{ site.data | jsonify }};
 signal = signal[piece]
+var count = signal['A06']['count'];
 
 function play() {
 	document.getElementById("stop").disabled = false;
@@ -60,18 +61,15 @@ function stop() {
 }
 
 function timer() {
-	if (timer_on = 0) return;
-
-	timestep ++;
-	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
-
-	// all seats have the same number of data points
-	var count = signal['A06']['count'];
+	if (timer_on == 0) return;
 
 	if (timestep >= count) {
 		stop();
 		return;
 	}
+
+	timestep ++;
+	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
 
 	for (var seat in signal) {
 		loop(seat);
@@ -79,13 +77,10 @@ function timer() {
 }
 
 function loop(seat) {
-
     var subj = document.getElementById(seat);
-
     if (!subj) return;
 
     var trans = subj.style.transform;
-
     var x = update(seat, 0, trans),
         y = update(seat, 1, trans),
         z = update(seat, 2, trans);
@@ -98,6 +93,7 @@ function update(seat, axis, trans) {
           - signal[seat]['median'][axis];
 
     var scale = 10;
+    // show z-axis as zoom
     if (axis == 2) return 1 + d / 20.0 * scale;
     else return d * scale;
 }
