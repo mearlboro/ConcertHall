@@ -46,7 +46,7 @@ my %timeframes = ( # where each song begins and ends, in seconds
 
 my $sample_freq = 25;
 
-my ($din, $dout) = ('./ImprovisationSynchronization/SVS_Proc_Data', './ConcertHall/data');
+my ($din, $dout) = ('./ImprovisationSynchronization/SVS_Proc_Data', './ConcertHall/_data');
 my ($fin, $fout, $FIN, $FOUT);
 
 my ($piece) = @ARGV;
@@ -68,12 +68,11 @@ foreach $fin (glob("$din/*.csv")) {
 
             open $FIN, "<", $fin or die "Can't open '$fin'";
 
-            $fout = "$dout/$piece.js";
+            $fout = "$dout/$piece.json";
             open $FOUT, ">>", $fout or die "Can't open '$fout'";
 
             if (-z $fout) {
-                print $FOUT "window.data = {};\n";
-                print $FOUT "window.data[$piece] = {\n";
+                print $FOUT "{\n";
             }
 
             process_csv($seat, $piece, $FIN, $FOUT);
