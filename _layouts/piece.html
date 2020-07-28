@@ -1,37 +1,19 @@
+---
+layout: default
+---
 
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Concert hall</title>
-	<link rel='stylesheet' href='styles.css'>
-	<script src='script.js'></script>
-	<script src='data/2.js'></script>
-</head>
-<body>
-<div class="menu">
-<a class="button" href="1.html">1st Piece</a>
-<a class="button" href="2.html">2nd Piece</a>
-<a class="button" href="3.html">3rd Piece</a>
-<a class="button" href="4.html">4th Piece</a>
-<a class="button" href="5.html">5th Piece</a>
-<a class="button" href="6.html">6th Piece</a>
-<a class="button" href="7.html">7th Piece</a>
-<a class="button" href="8.html">8th Piece</a>
-</div>
-
-<h1>Welcome to the Concert Hall</h1>
 <div class="menu menu-play">
-<button class="button" onclick="play(2)">PLAY</button>
+<button class="button" onclick="play({{ page.pieceno }})">PLAY</button>
 <button class="button" onclick="pause()">PAUSE</button>
 <button class="button" id="stop" onclick="stop()" disabled="1">STOP</button>
 </div>
 
 <div class="video">
-<video src="video/2.mp4">
+<video src="/assets/video/{{ page.pieceno }}.mp4">
 </div>
 
 <div class="headings">
-<h2 id="current"></h2>
+<h2 id="current">{{ page.piece }}</h2>
 </div>
 <div class="subheadings">
 <h6 id="timecode"></h6>
@@ -48,3 +30,4 @@
 
 </body>
 </html>
+
