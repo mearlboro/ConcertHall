@@ -1,29 +1,20 @@
+---
+layout: blank
+---
+
 var counter = null, video = null, timestep = 0, timer_on = 0;
 var sample_rate = 25.0;
+var piece = location.pathname.split('/').pop().split('.')[0];
+var signal = {{ site.data | jsonify }};
+signal = signal[piece]
 
-var songs = {
-	1 : "Score from Mozart (Let-go)",
-	2 : "Score from Mozart (Strict)",
-	3 : "Strict Improvisation with Single Lead",
-	4 : "Strict Improvisation with Dynamic Switch",
-	5 : "Let-go Improvisation with Dynamic Switch",
-	6 : "Let-go Improvisation with Single Lead",
-	7 : "Score from Haydn (strict)",
-	8 : "Score from Haydn (let-go)"
-};
-
-window.onload = function(e) {
-    var piece = location.pathname.split('/').pop().split('.')[0];
-    document.getElementById("current").innerHTML = songs[piece];
-};
-
-function play(piece) {
+function play() {
 	document.getElementById("stop").disabled = false;
 
     video = document.getElementsByTagName('video')[0];
 
     play_song();
-    play_animation(piece);
+    play_animation();
 }
 function play_song() {
     if (video.readyState == 4) {
@@ -31,16 +22,16 @@ function play_song() {
         video.play();
     }
 }
-function play_animation(piece) {
+function play_animation() {
 	// clear all movement from audience
-	for (var seat in window.data[piece]) {
+	for (var seat in signal) {
     	var elem = document.getElementById(seat);
         if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
 	}
 
     // define and start timer, with ticks in miliseconds
 	timer_on = 1;
-	counter = setInterval(function () { timer(piece) }, 1000 / sample_rate);
+	counter = setInterval(function () { timer() }, 1000 / sample_rate);
 }
 
 function pause() {
@@ -68,26 +59,26 @@ function stop() {
 	timer_on = 0;
 }
 
-function timer(piece) {
+function timer() {
 	if (timer_on = 0) return;
 
 	timestep ++;
 	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
 
 	// all seats have the same number of data points
-	var count = window.data[piece]['A06']['count'];
+	var count = signal['A06']['count'];
 
 	if (timestep >= count) {
 		stop();
 		return;
 	}
 
-	for (var seat in window.data[piece]) {
-		loop(piece, seat);
+	for (var seat in signal) {
+		loop(seat);
 	}
 }
 
-function loop(piece, seat) {
+function loop(seat) {
 
     var subj = document.getElementById(seat);
 
@@ -95,15 +86,16 @@ function loop(piece, seat) {
 
     var trans = subj.style.transform;
 
-    var x = update(piece, seat, 0, trans),
-        y = update(piece, seat, 1, trans),
-        z = update(piece, seat, 2, trans);
+    var x = update(seat, 0, trans),
+        y = update(seat, 1, trans),
+        z = update(seat, 2, trans);
 
     subj.style.setProperty('transform', 'translateX(' + x + 'px) translateY(' + y + 'px) scale(' + z + ')');
 }
 
-function update(piece, seat, axis, trans) {
-	var d = window.data[piece][seat]['acc'][timestep][axis] - window.data[piece][seat]['median'][axis];
+function update(seat, axis, trans) {
+	var d = signal[seat]['acc'][timestep][axis]
+          - signal[seat]['median'][axis];
 
     var scale = 10;
     if (axis == 2) return 1 + d / 20.0 * scale;
