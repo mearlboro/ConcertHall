@@ -5,34 +5,33 @@ layout: blank
 var counter = null, video = null, timestep = 0, timer_on = 0;
 var sample_rate = 25.0;
 var piece = location.pathname.split('/').pop().split('.')[0];
+
 var signal = {{ site.data | jsonify }};
 signal = signal[piece]
-var count = signal['A06']['count'];
+var count = signal['A06']['acc'].length;
 
 function play() {
 	document.getElementById("stop").disabled = false;
 
     video = document.getElementsByTagName('video')[0];
 
-    play_song();
-    play_animation();
-}
-function play_song() {
+    // only play everything if the video is ready
     if (video.readyState == 4) {
         console.log('Playing video');
         video.play();
-    }
-}
-function play_animation() {
-	// clear all movement from audience
-	for (var seat in signal) {
-    	var elem = document.getElementById(seat);
-        if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
-	}
 
-    // define and start timer, with ticks in miliseconds
-	timer_on = 1;
-	counter = setInterval(function () { timer() }, 1000 / sample_rate);
+        // clear all movement from audience
+        if (timestep == 0) {
+            for (var seat in signal) {
+                var elem = document.getElementById(seat);
+                if (elem) elem.style.setProperty('transform', 'translateX(+0%) translateY(+0%) scale(1)');
+            }
+        }
+
+        // define and start timer, with ticks in miliseconds
+        timer_on = 1;
+        counter = setInterval(timer, 1000 / sample_rate);
+    }
 }
 
 function pause() {
@@ -40,8 +39,7 @@ function pause() {
 	video.pause();
     console.log('Pausing video');
 
-    // animation
-	clearInterval(counter);
+    // only pause the timer to pause animation
 	timer_on = 0;
 }
 
@@ -68,7 +66,9 @@ function timer() {
 		return;
 	}
 
-	timestep ++;
+    // to avoid timer delays, sync the timer counter with the video seek time
+    timestep = Math.floor(video.currentTime * sample_rate)
+
 	document.getElementById('timecode').innerHTML = timestep / sample_rate + ' seconds';
 
 	for (var seat in signal) {
